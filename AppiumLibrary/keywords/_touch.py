@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from appium.webdriver.common.touch_action import TouchAction
+from appium.webdriver.extensions.action_helpers import ActionHelpers
 
 from AppiumLibrary.locators import ElementFinder
 from .keywordgroup import KeywordGroup
@@ -115,7 +115,7 @@ class _TouchKeywords(KeywordGroup):
         Long press the element with optional duration """
         driver = self._current_application()
         element = self._element_find(locator, True, True)
-        action = TouchAction(driver)
+        action = ActionHelpers()
         action.press(element).wait(duration).release().perform()
 
     def tap(self, locator, x_offset=None, y_offset=None, count=1):
@@ -131,7 +131,7 @@ class _TouchKeywords(KeywordGroup):
         """
         driver = self._current_application()
         el = self._element_find(locator, True, True)
-        action = TouchAction(driver)
+        action = ActionHelpers()
         action.tap(el,x_offset,y_offset, count).perform()
 
     def tap_with_positions(self, duration=500, *locations):
@@ -188,7 +188,7 @@ class _TouchKeywords(KeywordGroup):
         Click on a point"""
         self._info("Clicking on a point (%s,%s)." % (x,y))
         driver = self._current_application()
-        action = TouchAction(driver)
+        action = ActionHelpers()
         try:
             action.press(x=float(x), y=float(y)).wait(float(duration)).release().perform()
         except:
@@ -200,7 +200,7 @@ class _TouchKeywords(KeywordGroup):
         click element at a certain coordinate """
         self._info("Pressing at (%s, %s)." % (coordinate_X, coordinate_Y))
         driver = self._current_application()
-        action = TouchAction(driver)
+        action = ActionHelpers()
         action.press(x=coordinate_X, y=coordinate_Y).release().perform()
 
     def drag_and_drop(self, locator: str, target: str):
