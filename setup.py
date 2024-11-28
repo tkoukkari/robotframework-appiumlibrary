@@ -40,7 +40,7 @@ setup(name='robotframework-appiumlibrary',
           'decorator >= 3.3.2',
           'robotframework >= 5.0.1',
           'docutils >= 0.8.1',
-          'selenium >=4.0,<=4.16',
+          'selenium >=4.27.0,
           'Appium-Python-Client >= 4.3.0',
           'kitchen >= 1.2.4',
           'six >= 1.10.0'
