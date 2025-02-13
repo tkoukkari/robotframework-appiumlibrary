@@ -7,6 +7,8 @@ from appium import webdriver
 from appium.options.common import AppiumOptions
 from AppiumLibrary.utils import ApplicationCache
 from .keywordgroup import KeywordGroup
+from selenium.webdriver.remote.client_config import ClientConfig
+from urllib.parse import urlparse
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
@@ -57,7 +59,23 @@ class _ApplicationManagementKeywords(KeywordGroup):
             self._debug(f"strict_ssl found as {strict_ssl}")
 
         desired_caps = AppiumOptions().load_capabilities(caps=kwargs)
-        application = webdriver.Remote(str(remote_url), options=desired_caps, strict_ssl=strict_ssl)
+
+        # NOTE: The following code is a workaround for the issue for printing unnecessary warning message
+        parts = urlparse(remote_url)
+        if parts.username and parts.password:
+            #headers = make_headers(basic_auth=f"{parts.username}:{parts.password}")
+            appium_server_url = f"{parts.scheme}://{parts.hostname}{parts.path}"
+            client_config = ClientConfig(remote_server_addr=appium_server_url)
+
+            # Set credentials for authentication
+            client_config.username = parts.username
+            client_config.password = parts.password  # Securely handle authentication
+
+            application = webdriver.Remote(command_executor=appium_server_url, client_config=client_config, options=desired_caps, strict_ssl=strict_ssl)
+        else:
+            application = webdriver.Remote(str(remote_url), options=desired_caps, strict_ssl=strict_ssl)
+
+
 
         self._debug('Opened application with session id %s' % application.session_id)
 
